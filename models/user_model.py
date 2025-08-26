@@ -4,7 +4,6 @@ from datetime import datetime
 
 
 class UserModel(BaseModel):
-    id: Optional[int] = Field(None, description="The unique identifier of the user")
     username: str = Field(
         ..., min_length=3, max_length=50, description="The username of the user"
     )
@@ -25,3 +24,23 @@ class UserModel(BaseModel):
         default_factory=datetime.utcnow,
         description="The timestamp when the user was last updated",
     )
+    watch_history: list[str] = Field(
+        default_factory=list,
+        description="List of Video IDs watched by the user",
+    )
+    favorite_videos: list[str] = Field(
+        default_factory=list,
+        description="List of Videos marked as favorite by the user",
+    )
+
+
+class UserInDB(UserModel):
+    id: str
+    password: str
+    created_at: str
+    updated_at: str
+    access_token: Optional[str] = Field(None)
+    refresh_token: Optional[str] = Field(None)
+
+    class Config:
+       from_attributes = True
